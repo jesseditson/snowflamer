@@ -6,6 +6,10 @@ var path = require('path')
 var im = require('imagemagick')
 var exec = require('child_process').exec
 
+process.on('uncaughtException',function(err){
+  console.log('error thrown: ', err)
+})
+
 var tmpdir = './tmp'
 var snowflame = './assets/snowflame.png'
 try { fs.mkdirSync(tmpdir,0755) } catch(e){}
