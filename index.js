@@ -12,13 +12,31 @@ process.on('uncaughtException',function(err){
 
 var tmpdir = './tmp'
 var snowflame = './assets/snowflame.png'
+var snowflame_ponies = ['./assets/snowflame_pony.png']
 var snowWidth = 320
 var snowHeight = 452
+var ponyWidth = [663]
+var ponyHeight = [521]
+var offsetLeft = 0.1
+var offsetHeight = 0.9
 try { fs.mkdirSync(tmpdir,0755) } catch(e){}
 
 var server = http.createServer(function(req,res){
   var params = url.parse(req.url).pathname.split('/')
-  var fileUrl = decodeURIComponent(params[1])
+  var encodedFileUrl = params[1]
+  var pony = false
+  if(params[1] == 'pony'){
+    encodedFileUrl = params[2]
+    pony = true
+    var pony_index = Math.floor(Math.random(snowflame_ponies.length))
+    console.log('using pony ',pony_index)
+    snowflame = snowflame_ponies[pony_index]
+    snowWidth = ponyWidth[pony_index]
+    snowHeight = ponyHeight[pony_index]
+    offsetLeft = 0.05
+    offsetHeight = 0.7
+  }
+  var fileUrl = decodeURIComponent(encodedFileUrl)
   var returnError = function(e){
     console.error(e.stack)
     res.writeHead(500)
@@ -47,10 +65,10 @@ var server = http.createServer(function(req,res){
       var dims = dim.split('x')
       var height = parseInt(dims[0].trim(),10)
       var width = parseInt(dims[1].trim(),10)
-      var toHeight = height * 0.9
+      var toHeight = height * offsetHeight
       var toWidth = snowWidth * (toHeight / snowHeight)
       var top = height - toHeight
-      var left = width * 0.1
+      var left = width * offsetLeft
       var options = [
         outfile,
         '-draw "image over '+left+','+top+' '+toWidth+','+toHeight+'\''+snowflame+'\'"',
@@ -62,7 +80,7 @@ var server = http.createServer(function(req,res){
         console.log('converted.')
         fs.createReadStream(completeFile).pipe(res)
         // clean up
-        //fs.unlink(outfile)
+        fs.unlink(outfile)
       })
     })
   })
