@@ -11,14 +11,14 @@ process.on('uncaughtException',function(err){
 })
 
 var tmpdir = './tmp'
-var snowflame = './assets/snowflame.png'
 var snowflame_ponies = ['./assets/snowflame_pony.png']
-var snowWidth = 320
-var snowHeight = 452
+var _snowflame = './assets/snowflame.png'
+var _snowWidth = 320
+var _snowHeight = 452
+var _offsetLeft = 0.1
+var _offsetHeight = 0.9
 var ponyWidth = [663]
 var ponyHeight = [521]
-var offsetLeft = 0.1
-var offsetHeight = 0.9
 try { fs.mkdirSync(tmpdir,0755) } catch(e){}
 
 var server = http.createServer(function(req,res){
@@ -30,11 +30,17 @@ var server = http.createServer(function(req,res){
     pony = true
     var pony_index = Math.floor(Math.random(snowflame_ponies.length))
     console.log('using pony ',pony_index)
-    snowflame = snowflame_ponies[pony_index]
-    snowWidth = ponyWidth[pony_index]
-    snowHeight = ponyHeight[pony_index]
-    offsetLeft = 0.05
-    offsetHeight = 0.7
+    var snowflame = snowflame_ponies[pony_index]
+    var snowWidth = ponyWidth[pony_index]
+    var snowHeight = ponyHeight[pony_index]
+    var offsetLeft = 0.05
+    var offsetHeight = 0.7
+  } else {
+    var snowflame = _snowflame
+    var snowWidth = _snowWidth
+    var snowHeight = _snowHeight
+    var offsetLeft = _offsetLeft
+    var offsetHeight = _offsetHeight
   }
   var fileUrl = decodeURIComponent(encodedFileUrl)
   var returnError = function(e){
