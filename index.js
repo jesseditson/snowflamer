@@ -12,6 +12,7 @@ process.on('uncaughtException',function(err){
 
 var tmpdir = './tmp'
 var snowflame_ponies = ['./assets/snowflame_pony.png']
+var log = './assets/LOG.png'
 var _snowflame = './assets/snowflame.png'
 var _snowWidth = 320
 var _snowHeight = 452
@@ -19,15 +20,15 @@ var _offsetLeft = 0.1
 var _offsetHeight = 0.9
 var ponyWidth = [663]
 var ponyHeight = [521]
+var logWidth = 1280
+var logHeight = 1024
 try { fs.mkdirSync(tmpdir,0755) } catch(e){}
 
 var server = http.createServer(function(req,res){
   var params = url.parse(req.url).pathname.split('/')
   var encodedFileUrl = params[1]
-  var pony = false
   if(params[1] == 'pony'){
     encodedFileUrl = params[2]
-    pony = true
     var pony_index = Math.floor(Math.random(snowflame_ponies.length))
     console.log('using pony ',pony_index)
     var snowflame = snowflame_ponies[pony_index]
@@ -35,6 +36,14 @@ var server = http.createServer(function(req,res){
     var snowHeight = ponyHeight[pony_index]
     var offsetLeft = 0.05
     var offsetHeight = 0.7
+  } else if(params[1] == 'log'){
+    encodedFileUrl = params[2]
+    console.log("using LOG")
+    var snowflame = log
+    var snowWidth = logWidth
+    var logHeight = logHeight
+    var offsetLeft = 0
+    var offsetHeight = 0.2
   } else {
     var snowflame = _snowflame
     var snowWidth = _snowWidth
