@@ -64,7 +64,7 @@ var server = http.createServer(function(req,res){
   var filename = fileUrl.split('/').slice(-1)[0]
   var completeFile = path.join(tmpdir,params[1] + '.png')
   if(fs.existsSync(completeFile)){
-    //return fs.createReadStream(completeFile).pipe(res)
+    return fs.createReadStream(completeFile).pipe(res)
   }
   var outfile = path.join(tmpdir,filename.replace(/(\.[^\.]+)$/, new Date().getTime() + "$1"))
   console.log('downloading',fileUrl,'to',outfile)
@@ -94,8 +94,10 @@ var server = http.createServer(function(req,res){
         if(err || stderr) return returnError(err || new Error(stderr))
         console.log('converted.')
         fs.createReadStream(completeFile).pipe(res)
-        // clean up
-        fs.unlink(outfile)
+        // clean up in 20 seconds
+        setTimeout(function(){
+          fs.unlink(outfile)
+        },20000)
       })
     })
   })
