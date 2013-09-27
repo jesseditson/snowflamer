@@ -43,7 +43,7 @@ var server = http.createServer(function(req,res){
     var snowWidth = logWidth
     var logHeight = logHeight
     var offsetLeft = 0
-    var offsetHeight = 0.2
+    var offsetHeight = 0.8
   } else {
     var snowflame = _snowflame
     var snowWidth = _snowWidth
